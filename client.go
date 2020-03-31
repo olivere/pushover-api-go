@@ -25,6 +25,10 @@ type Client struct {
 	logger   Logger
 	ua       string
 
+	appLimit     int64 // # of available API calls (as reported by the last API call)
+	appRemaining int64 // # of remaining API calls (as reported by the last API call)
+	appReset     int64 // date/time (Unix epoch) when the API call limits are reset
+
 	// Messages allows e.g. sending a notification.
 	Messages *messagesAPI
 }
@@ -133,4 +137,22 @@ func (c *Client) Do(req *http.Request) (*http.Response, error) {
 	c.logger.Log(req, resp, err, start, duration)
 
 	return resp, err
+}
+
+// Limits returns the API limits as reported by the last API call.
+// If you want to know the current limits without relying on the last
+// API call, use Messages.Limits instead.
+//
+// See https://pushover.net/api#limits for details.
+func (c *Client) Limits() Limits {
+	var t time.Time
+	if c.appReset > 0 {
+		t = time.Unix(c.appLimit, 0)
+	}
+	return Limits{
+		Limit:     c.appLimit,
+		Remaining: c.appLimit,
+		Reset:     c.appReset,
+		ResetTime: t,
+	}
 }

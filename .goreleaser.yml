@@ -22,9 +22,9 @@ builds:
     - goos: darwin
       goarch: 386
 checksum:
-  name_template: '{{ .ProjectName }}_checksums.txt'
+  name_template: 'pushover_checksums.txt'
 archives:
-- name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+- name_template: 'pushover_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
   replacements:
     darwin: Darwin
     linux: Linux
