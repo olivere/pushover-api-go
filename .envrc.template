@@ -1,0 +1,6 @@
+export GITHUB_TOKEN=
+
+export GO111MODULE=on
+
+export APP_TOKEN=
+export USER_KEY=
