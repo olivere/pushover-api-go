@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"runtime"
+	"strconv"
 	"time"
 )
 
@@ -133,6 +134,16 @@ func (c *Client) Do(req *http.Request) (*http.Response, error) {
 	start := time.Now()
 	resp, err := c.tr.RoundTrip(req)
 	duration := time.Since(start)
+
+	if v := resp.Header.Get(http.CanonicalHeaderKey("X-Limit-App-Limit")); v != "" {
+		c.appLimit, _ = strconv.ParseInt(v, 10, 64)
+	}
+	if v := resp.Header.Get(http.CanonicalHeaderKey("X-Limit-App-Remaining")); v != "" {
+		c.appRemaining, _ = strconv.ParseInt(v, 10, 64)
+	}
+	if v := resp.Header.Get(http.CanonicalHeaderKey("X-Limit-App-Reset")); v != "" {
+		c.appReset, _ = strconv.ParseInt(v, 10, 64)
+	}
 
 	c.logger.Log(req, resp, err, start, duration)
 
