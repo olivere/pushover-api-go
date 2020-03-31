@@ -10,7 +10,7 @@ import (
 
 const (
 	// Version of the Pushover API for Go.
-	Version = "0.1.0"
+	Version = "0.1.1"
 
 	defaultBaseURL = "https://api.pushover.net"
 )
